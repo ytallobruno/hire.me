@@ -1,6 +1,6 @@
 ## 🔧 Instalação
 
-- Pré-requisito para executar o projeto
+- Pré-requisitos para executar o projeto
     - [**Java 17**](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
     - [**Gradle**](https://docs.gradle.org/current/userguide/userguide.html) | _or use the wrapper ./gradlew_
     - [**Spring Boot 3**](https://spring.io/projects/spring-boot)
