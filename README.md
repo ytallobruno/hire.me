@@ -1,3 +1,48 @@
+## 🔧 Instalação
+
+- Pré-requisito para executar o projeto
+    - [**Java 17**](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
+    - [**Gradle**](https://docs.gradle.org/current/userguide/userguide.html) | _or use the wrapper ./gradlew_
+    - [**Spring Boot 3**](https://spring.io/projects/spring-boot)
+    - [**Docker**](https://docs.docker.com/desktop/setup/install/linux/)
+
+## 🚀 Instalando dependências
+
+Execute o comando abaixo na raiz do projeto para instalar as dependências:
+
+````
+./gradlew clean install
+````
+
+
+## ☕ Rodando local
+
+Subir contêineres de dependências:
+```make
+make run-deps
+```
+
+Rodar aplicação (abra outro terminal antes):
+```make
+export SPRING_PROFILES_ACTIVE=local ; ./gradlew bootRun
+```
+
+## 🧐 Build e Testes
+
+
+Executa build da aplicação:
+```make
+make build-app
+```
+
+Executa os testes e relatório de cobertura:
+```make
+make test
+```
+
+<br>
+<hr>
+
 # Hire.me
 Um pequeno projeto para testar suas habilidades como programador.
 

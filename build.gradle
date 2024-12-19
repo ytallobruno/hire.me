@@ -3,11 +3,16 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.2.4'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'jacoco'
 }
 
 group = 'com.bemobi'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
+
+jar {
+    enabled = false
+}
 
 configurations {
     compileOnly {
@@ -17,6 +22,25 @@ configurations {
 
 application {
     mainClass = 'com.bemobi.UrlShortener.UrlShortenerApplication'
+}
+
+jacoco {
+    toolVersion = "0.8.8"
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required.set(true)
+        html.outputLocation.set(layout.buildDirectory.dir('jacoco'))
+        xml.outputLocation.set(layout.buildDirectory.file('jacoco/test/jacocoTestReport.xml'))
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: 'com/bemobi/UrlShortener/config/**')
+        }))
+    }
 }
 
 repositories {
@@ -37,4 +61,6 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+
+    finalizedBy([jacocoTestReport])
 }
