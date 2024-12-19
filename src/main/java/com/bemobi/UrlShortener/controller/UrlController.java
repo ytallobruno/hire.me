@@ -5,6 +5,7 @@ import com.bemobi.UrlShortener.controller.models.response.ShortenUrlResponse;
 import com.bemobi.UrlShortener.service.UrlService;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin
 @RequestMapping("/v1")
 public class UrlController {
 
