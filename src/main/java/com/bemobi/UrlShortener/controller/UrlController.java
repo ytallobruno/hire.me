@@ -4,7 +4,9 @@ import com.bemobi.UrlShortener.controller.models.response.PopularUrlResponse;
 import com.bemobi.UrlShortener.controller.models.response.ShortenUrlResponse;
 import com.bemobi.UrlShortener.service.UrlService;
 import java.util.List;
+import java.util.Map;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +14,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 @AllArgsConstructor
@@ -28,9 +29,9 @@ public class UrlController {
     }
 
     @GetMapping("/{alias}")
-    public RedirectView retrieveUrl(@PathVariable String alias) {
+    public ResponseEntity<Map<String, String>> retrieveUrl(@PathVariable String alias) {
         String originalUrl = urlService.retrieveUrl(alias);
-        return new RedirectView(originalUrl);
+        return ResponseEntity.ok(Map.of("url", originalUrl));
     }
 
     @GetMapping("/popular")
