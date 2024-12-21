@@ -48,15 +48,22 @@ const Popular = () => {
           {urls.map((url) => (
             <div
               key={url.alias}
-              onClick={() => handleCardClick(url.alias)}
+              onClick={() => handleCardClick(url.hashedUrl)}
               className="p-6 border rounded-lg shadow-md bg-white transform transition-transform hover:scale-105 cursor-pointer"
             >
-              <h3 className="text-lg font-semibold text-gray-600 mb-2">Rank: {url.rank}</h3>
-              <p className="text-sm text-gray-600 mb-2"><b>Alias</b>: {url.alias}</p>
-              <p className="text-sm text-gray-600 mb-2"><b>Access Count</b>: {url.accessCount}</p>
-              <p className="text-blue-500 block truncate">
-                {url.originalUrl}
+              <h3 className="text-lg font-semibold text-gray-600 mb-2">
+                Rank: {url.rank}
+              </h3>
+              <p className="text-sm text-gray-600 mb-2">
+                <b>Alias</b>: {url.alias}
               </p>
+              <p className="text-sm text-gray-600 mb-2">
+                <b>Access Count</b>: {url.accessCount}
+              </p>
+              <p className="text-sm text-gray-600 mb-2 truncate" title={url.originalUrl}>
+                <b>Original url</b>: {url.originalUrl}
+              </p>
+              <p className="text-blue-500 block truncate">{url.hashedUrl}</p>
             </div>
           ))}
         </div>

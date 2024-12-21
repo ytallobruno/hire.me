@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 public class AliasUtils {
 
     public static String generateAlias(String url) {
-        String uuid = UUID.randomUUID().toString().replace("-", "").substring(0, 4);
+        String uuid = UUID.randomUUID().toString().replace("-", "").substring(0, 8);
         String hostname = extractHostname(url);
         return hostname.substring(0, Math.min(4, hostname.length())) + uuid;
     }

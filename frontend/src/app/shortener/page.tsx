@@ -21,7 +21,7 @@ const Shortener = () => {
     try {
       const formattedUrl = /^https?:\/\//i.test(url) ? url : `http://${url}`;
       const response = await shortenUrl(formattedUrl, alias);
-      setMessage(getSuccessMessage(alias, response.alias));
+      setMessage(getSuccessMessage(alias, response.hashedUrl));
       setMessageType("success");
     } catch (error) {
       const errorMessage =
@@ -35,13 +35,15 @@ const Shortener = () => {
     }
   };
 
-  const getSuccessMessage = (alias: string, responseAlias: string) => (
+  const getSuccessMessage = (alias: string, hashedUrl: string) => (
     <span>
       URL shortened successfully!
       {!alias && (
         <>
           <br />
-          Here&#39;s your alias: <strong>{responseAlias}</strong>
+          Here&#39;s your hashed url:
+          <br/>
+          <strong>{hashedUrl}</strong>
         </>
       )}
     </span>
