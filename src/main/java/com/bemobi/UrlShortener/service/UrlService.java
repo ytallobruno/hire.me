@@ -1,8 +1,10 @@
 package com.bemobi.UrlShortener.service;
 
-import com.bemobi.UrlShortener.config.HireMeConfig;
 import com.bemobi.UrlShortener.controller.models.response.PopularUrlResponse;
+import com.bemobi.UrlShortener.controller.models.response.RetrieveUrlResponse;
 import com.bemobi.UrlShortener.controller.models.response.ShortenUrlResponse;
+import com.bemobi.UrlShortener.controller.models.response.ShortenUrlResponse.Statistics;
+import com.bemobi.UrlShortener.converter.UrlToRetrieveUrlResponse;
 import com.bemobi.UrlShortener.model.Url;
 import com.bemobi.UrlShortener.model.exception.CustomAliasAlreadyExistsException;
 import com.bemobi.UrlShortener.model.exception.InvalidUrlException;
@@ -23,7 +25,7 @@ import org.springframework.stereotype.Service;
 public class UrlService {
 
     private final UrlRepository urlRepository;
-    private final HireMeConfig hireMeConfig;
+    private final UrlToRetrieveUrlResponse urlToRetrieveUrlResponse;
 
     public ShortenUrlResponse shortenUrl(String url, String customAlias) {
         log.info("Shortening URL: {}", url);
@@ -38,7 +40,7 @@ public class UrlService {
         long startTime = System.currentTimeMillis();
 
         String alias = (customAlias != null) ? customAlias : AliasUtils.generateAlias(url);
-        String hashedUrl = hireMeConfig.getAppBaseUrl() + "/v1/" + alias;
+        String hashedUrl = "http://shortener/" + alias;
 
         Url newUrl = Url.builder()
             .originalUrl(url)
@@ -55,15 +57,20 @@ public class UrlService {
         return this.toShortenUrlResponse(timeTaken, newUrl);
     }
 
-    public String retrieveUrl(String alias) {
-        log.info("Retrieving URL for alias: {}", alias);
+    public RetrieveUrlResponse retrieveUrl(String hashedUrl) {
+        log.info("Retrieving URL for hashed URL: {}", hashedUrl);
+        String baseUrl = "http://shortener/";
+        if (!hashedUrl.startsWith(baseUrl)) {
+            throw new ShortenedUrlNotFoundException(hashedUrl);
+        }
+        String alias = hashedUrl.substring(baseUrl.length());
         Url url = urlRepository.findByAlias(alias);
         if (url == null) {
             throw new ShortenedUrlNotFoundException(alias);
         }
         url.setAccessCount(url.getAccessCount() + 1);
         urlRepository.save(url);
-        return url.getOriginalUrl();
+        return urlToRetrieveUrlResponse.convert(url);
     }
 
     public List<PopularUrlResponse> getPopularUrls() {
@@ -84,7 +91,7 @@ public class UrlService {
     }
 
     private ShortenUrlResponse toShortenUrlResponse(long timeTaken, Url url) {
-        ShortenUrlResponse.Statistics statistics = new ShortenUrlResponse.Statistics(timeTaken + "ms");
+        Statistics statistics = new Statistics(timeTaken + "ms");
         return ShortenUrlResponse.builder()
             .alias(url.getAlias())
             .originalUrl(url.getOriginalUrl())

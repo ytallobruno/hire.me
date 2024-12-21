@@ -1,15 +1,17 @@
 package com.bemobi.UrlShortener.controller;
 
 import com.bemobi.UrlShortener.controller.models.response.PopularUrlResponse;
+import com.bemobi.UrlShortener.controller.models.response.RetrieveUrlResponse;
 import com.bemobi.UrlShortener.controller.models.response.ShortenUrlResponse;
 import com.bemobi.UrlShortener.service.UrlService;
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,10 +30,13 @@ public class UrlController {
         return urlService.shortenUrl(url, customAlias);
     }
 
-    @GetMapping("/{alias}")
-    public ResponseEntity<Map<String, String>> retrieveUrl(@PathVariable String alias) {
-        String originalUrl = urlService.retrieveUrl(alias);
-        return ResponseEntity.ok(Map.of("url", originalUrl));
+    @GetMapping("/")
+    public ResponseEntity<Map<String, String>> retrieveUrl(@RequestParam String alias) {
+        RetrieveUrlResponse retrieveUrlResponse = urlService.retrieveUrl(alias);
+        return ResponseEntity.status(HttpStatus.FOUND)
+            .header("Location", retrieveUrlResponse.getOriginalUrl())
+            .location(URI.create(retrieveUrlResponse.getOriginalUrl()))
+            .build();
     }
 
     @GetMapping("/popular")

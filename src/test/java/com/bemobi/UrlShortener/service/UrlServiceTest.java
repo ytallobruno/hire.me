@@ -9,9 +9,10 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.bemobi.UrlShortener.config.HireMeConfig;
 import com.bemobi.UrlShortener.controller.models.response.PopularUrlResponse;
+import com.bemobi.UrlShortener.controller.models.response.RetrieveUrlResponse;
 import com.bemobi.UrlShortener.controller.models.response.ShortenUrlResponse;
+import com.bemobi.UrlShortener.converter.UrlToRetrieveUrlResponse;
 import com.bemobi.UrlShortener.model.Url;
 import com.bemobi.UrlShortener.model.exception.CustomAliasAlreadyExistsException;
 import com.bemobi.UrlShortener.model.exception.InvalidUrlException;
@@ -36,7 +37,7 @@ class UrlServiceTest {
     private UrlRepository urlRepository;
 
     @Mock
-    private HireMeConfig hireMeConfig;
+    private UrlToRetrieveUrlResponse urlToRetrieveUrlResponse;
 
     @InjectMocks
     private UrlService urlService;
@@ -56,11 +57,11 @@ class UrlServiceTest {
 
                 Url newUrl = Url.builder()
                     .originalUrl(url)
-                    .hashedUrl("http://short.url/v1/" + generatedAlias)
+                    .hashedUrl("http://shortener/" + generatedAlias)
+                    .alias(generatedAlias)
                     .accessCount(0L)
                     .build();
 
-                when(hireMeConfig.getAppBaseUrl()).thenReturn("http://short.url");
                 when(urlRepository.save(any(Url.class))).thenReturn(newUrl);
 
                 ShortenUrlResponse response = urlService.shortenUrl(url, null);
@@ -77,7 +78,7 @@ class UrlServiceTest {
         void withValidUrlAndCustomAlias_shouldReturnShortenUrlResponse() {
             String url = "http://example.com";
             String customAlias = "customAlias";
-            String hashedUrl = "http://short.url/v1/" + customAlias;
+            String hashedUrl = "http://shortener/" + customAlias;
 
             try (MockedStatic<AliasUtils> aliasUtilsMockedStatic = mockStatic(AliasUtils.class)) {
                 aliasUtilsMockedStatic.when(() -> AliasUtils.isValidUrl(url)).thenReturn(true);
@@ -89,7 +90,6 @@ class UrlServiceTest {
                     .accessCount(0L)
                     .build();
 
-                when(hireMeConfig.getAppBaseUrl()).thenReturn("http://short.url");
                 when(urlRepository.save(any(Url.class))).thenReturn(newUrl);
 
                 ShortenUrlResponse response = urlService.shortenUrl(url, customAlias);
@@ -131,21 +131,28 @@ class UrlServiceTest {
     class RetrieveUrlTests {
 
         @Test
-        void withExistingAlias_shouldReturnOriginalUrl() {
+        void withExistingAlias_shouldReturnRetrieveUrlResponse() {
             String alias = "testAlias";
-            String originalUrl = "http://example.com";
-
             Url url = Url.builder()
-                .originalUrl(originalUrl)
+                .originalUrl("http://example.com")
                 .alias(alias)
                 .accessCount(0L)
                 .build();
 
+            RetrieveUrlResponse response = RetrieveUrlResponse.builder()
+                .alias(alias)
+                .originalUrl("http://example.com")
+                .hashedUrl("http://shortener/testAlias")
+                .accessCount(1L)
+                .build();
+
             when(urlRepository.findByAlias(alias)).thenReturn(url);
+            when(urlToRetrieveUrlResponse.convert(url)).thenReturn(response);
 
-            String retrievedUrl = urlService.retrieveUrl(alias);
+            RetrieveUrlResponse retrievedResponse = urlService.retrieveUrl(response.getHashedUrl());
 
-            assertEquals(originalUrl, retrievedUrl);
+            assertNotNull(retrievedResponse);
+            assertEquals(response, retrievedResponse);
             assertEquals(1L, url.getAccessCount());
             verify(urlRepository, times(1)).save(url);
         }
@@ -153,10 +160,11 @@ class UrlServiceTest {
         @Test
         void withNonExistingAlias_shouldThrowShortenedUrlNotFoundException() {
             String alias = "nonExistingAlias";
+            String hashedUrl = "http://shortener/" + alias;
 
             when(urlRepository.findByAlias(alias)).thenReturn(null);
 
-            assertThrows(ShortenedUrlNotFoundException.class, () -> urlService.retrieveUrl(alias));
+            assertThrows(ShortenedUrlNotFoundException.class, () -> urlService.retrieveUrl(hashedUrl));
         }
     }
 
@@ -168,7 +176,7 @@ class UrlServiceTest {
             List<Url> urls = IntStream.range(0, 10)
                 .mapToObj(i -> Url.builder()
                     .originalUrl("http://example.com/" + i)
-                    .hashedUrl("http://short.url/testAlias" + i)
+                    .hashedUrl("http://shortener/testAlias" + i)
                     .alias("testAlias" + i)
                     .accessCount((long) (100 - i))
                     .build())
