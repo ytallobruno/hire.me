@@ -24,15 +24,15 @@ const Retrieve = () => {
   const handleRetrieve = async () => {
     setLoading(true);
     try {
-      const originalUrl = await retrieveUrl(alias);
+      const retrievedData = await retrieveUrl(alias);
       setModalTitle("Success");
-      setModalMessage(`You are being redirected to ${originalUrl}`);
+      setModalMessage(`You are being redirected to ${retrievedData}`);
       setShowModal(true);
       const timer = setInterval(() => {
         setRedirectTimer((prev) => {
           if (prev === 1) {
             clearInterval(timer);
-            window.open(originalUrl, "_blank");
+            window.open(retrievedData, "_blank");
             setShowModal(false);
           }
           return prev - 1;
@@ -65,7 +65,7 @@ const Retrieve = () => {
           value={alias}
           onChange={(e) => setAlias(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Enter the alias of the URL"
+          placeholder="Enter the URL"
         />
         <div className="flex space-x-4">
           <DefaultButton

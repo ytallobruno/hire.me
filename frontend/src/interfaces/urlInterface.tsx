@@ -14,3 +14,5 @@ export interface ShortenUrlResponse {
     timeTaken: string;
   };
 }
+
+export type RetrievedUrlResponse = Omit<PopularUrlResponse, "rank">

@@ -22,12 +22,15 @@ export async function shortenUrl(
   }
 }
 
-export async function retrieveUrl(alias: string) {
+//
+// @TODO: Fix cors error while redirect
+//
+export async function retrieveUrl(alias: string): Promise<string> {
   try {
-    const response = await api.get(`/${alias}`, {
+    const response = await api.get(`/?alias=${alias}`, {
       maxRedirects: 0,
     });
-    return response.data.url;
+    return response.headers["location"];
   } catch (error) {
     console.error("Error retrieving URL: ", error);
     throw error;
