@@ -5,10 +5,11 @@
     - [**Gradle**](https://docs.gradle.org/current/userguide/userguide.html) | _or use the wrapper ./gradlew_
     - [**Spring Boot 3**](https://spring.io/projects/spring-boot)
     - [**Docker**](https://docs.docker.com/desktop/setup/install/linux/)
+    - [**Yarn**](https://classic.yarnpkg.com/en/docs/install)
 
 ## 🚀 Instalando dependências
 
-Execute o comando abaixo na raiz do projeto para instalar as dependências:
+Execute o comando abaixo na raiz do projeto para instalar as dependências do backend:
 
 ````
 ./gradlew clean install
@@ -17,17 +18,17 @@ Execute o comando abaixo na raiz do projeto para instalar as dependências:
 
 ## ☕ Rodando local
 
-Subir contêineres de dependências:
+Subir contêineres de dependências (MySql e Frontend):
 ```make
 make run-deps
 ```
 
-Rodar aplicação (abra outro terminal antes):
+Rodar o backend:
 ```make
 export SPRING_PROFILES_ACTIVE=local ; ./gradlew bootRun
 ```
 
-## 🧐 Build e Testes
+## 🧐 Build e Testes do backend
 
 
 Executa build da aplicação:
