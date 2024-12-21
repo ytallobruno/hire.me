@@ -12,5 +12,14 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql
 
+  frontend:
+    image: node:18.20.2
+    working_dir: /app
+    volumes:
+      - ../frontend:/app
+    ports:
+      - "3000:3000"
+    command: sh -c "yarn install && yarn dev"
+
 volumes:
   mysql-data:
