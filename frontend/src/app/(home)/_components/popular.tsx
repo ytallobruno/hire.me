@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { retrieveUrl, getPopularUrls } from "@/app/_actions/urlAction";
+import { getPopularUrls } from "@/app/_actions/urlAction";
 import { PopularUrlResponse } from "@/interfaces/urlInterface";
 import Spinner from "@/app/_components/spinner";
-import axios from "axios";
+import {getApiUrl} from "@/utils/environment";
 
 const Popular = () => {
   const [urls, setUrls] = useState<PopularUrlResponse[]>([]);
@@ -24,18 +24,10 @@ const Popular = () => {
     fetchPopularUrls();
   }, [refresh]);
 
-  const handleCardClick = async (alias: string) => {
-    try {
-      const originalUrl = await retrieveUrl(alias);
-      window.open(originalUrl, "_blank");
-      setRefresh((prev) => !prev);
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 404) {
-        alert("SHORTENED URL NOT FOUND");
-      } else {
-        alert("Error retrieving URL, try again");
-      }
-    }
+  const handleCardClick = async (hashedUrl: string) => {
+    const url = `${getApiUrl(process.env.NODE_ENV)}/?alias=${hashedUrl}`;
+    window.open(url, "_blank");
+    setTimeout(() => setRefresh((prev) => !prev), 100);
   };
 
   return (
@@ -60,7 +52,10 @@ const Popular = () => {
               <p className="text-sm text-gray-600 mb-2">
                 <b>Access Count</b>: {url.accessCount}
               </p>
-              <p className="text-sm text-gray-600 mb-2 truncate" title={url.originalUrl}>
+              <p
+                className="text-sm text-gray-600 mb-2 truncate"
+                title={url.originalUrl}
+              >
                 <b>Original url</b>: {url.originalUrl}
               </p>
               <p className="text-blue-500 block truncate">{url.hashedUrl}</p>

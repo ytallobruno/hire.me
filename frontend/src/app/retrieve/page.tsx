@@ -1,11 +1,11 @@
 "use client";
-import { useState, useEffect } from "react";
+
+import { useEffect, useState } from "react";
 import DefaultButton from "@/app/_components/defaultButton";
-import { retrieveUrl } from "@/app/_actions/urlAction";
 import Spinner from "@/app/_components/spinner";
 import Modal from "@/app/_components/modal";
 import TextInput from "@/app/_components/textInput";
-import axios from "axios";
+import { getApiUrl } from "@/utils/environment";
 
 const Retrieve = () => {
   const [alias, setAlias] = useState("");
@@ -23,32 +23,45 @@ const Retrieve = () => {
 
   const handleRetrieve = async () => {
     setLoading(true);
+    const url = `${getApiUrl(process.env.NODE_ENV)}/?alias=${alias}`;
+
     try {
-      const retrievedData = await retrieveUrl(alias);
-      setModalTitle("Success");
-      setModalMessage(`You are being redirected to ${retrievedData}`);
-      setShowModal(true);
-      const timer = setInterval(() => {
-        setRedirectTimer((prev) => {
-          if (prev === 1) {
-            clearInterval(timer);
-            window.open(retrievedData, "_blank");
-            setShowModal(false);
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    } catch (error) {
-      setModalTitle("Error");
-      if (axios.isAxiosError(error) && error.response?.status === 404) {
-        setModalMessage("SHORTENED URL NOT FOUND");
-      } else {
-        setModalMessage("Error retrieving URL, try again");
+      const response = await fetch(url, { redirect: "manual" });
+
+      if (response.type === "opaqueredirect") {
+        showSuccessModal(url);
+        return;
       }
-      setShowModal(true);
+
+      const errorData = await response.json();
+      handleModal("Error", errorData.description || "SHORTENED URL NOT FOUND");
+    } catch {
+      handleModal("Error", "Error retrieving URL, try again");
     } finally {
       setLoading(false);
     }
+  };
+
+  const showSuccessModal = (url: string) => {
+    setRedirectTimer(3);
+    handleModal("Success", "You are being redirected");
+
+    const timer = setInterval(() => {
+      setRedirectTimer((prev) => {
+        if (prev === 1) {
+          clearInterval(timer);
+          window.open(url, "_blank");
+          setShowModal(false);
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
+  const handleModal = (title: string, message: string) => {
+    setModalTitle(title);
+    setModalMessage(message);
+    setShowModal(true);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
