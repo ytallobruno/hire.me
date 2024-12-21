@@ -1,0 +1,282 @@
+{
+	"info": {
+		"_postman_id": "9e9433e2-77ef-4175-ac05-3a02f9805c17",
+		"name": "Hire.Me",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21636762"
+	},
+	"item": [
+		{
+			"name": "shorten",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/shortener?url=http://google.com.br&customAlias=google",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"shortener"
+					],
+					"query": [
+						{
+							"key": "url",
+							"value": "http://google.com.br"
+						},
+						{
+							"key": "customAlias",
+							"value": "google"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "200 OK",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/v1/shortener?url=http://google.com.br&customAlias=google",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"shortener"
+							],
+							"query": [
+								{
+									"key": "url",
+									"value": "http://google.com.br"
+								},
+								{
+									"key": "customAlias",
+									"value": "google"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Vary",
+							"value": "Access-Control-Request-Method"
+						},
+						{
+							"key": "Vary",
+							"value": "Access-Control-Request-Headers"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 21 Dec 2024 00:24:00 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"alias\": \"google\",\n    \"originalUrl\": \"http://google.com.br\",\n    \"hashedUrl\": \"http://localhost:8080/v1/google\",\n    \"statistics\": {\n        \"timeTaken\": \"83ms\"\n    }\n}"
+				},
+				{
+					"name": "409 CONFLICT",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/v1/shortener?url=http://google.com.br&customAlias=google",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"shortener"
+							],
+							"query": [
+								{
+									"key": "url",
+									"value": "http://google.com.br"
+								},
+								{
+									"key": "customAlias",
+									"value": "google"
+								}
+							]
+						}
+					},
+					"status": "Conflict",
+					"code": 409,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Vary",
+							"value": "Access-Control-Request-Method"
+						},
+						{
+							"key": "Vary",
+							"value": "Access-Control-Request-Headers"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 21 Dec 2024 00:24:17 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"alias\": \"google\",\n    \"err_code\": \"001\",\n    \"description\": \"CUSTOM ALIAS ALREADY EXISTS\"\n}"
+				}
+			]
+		},
+		{
+			"name": "retrieve",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/?alias=http://shortener/google",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						""
+					],
+					"query": [
+						{
+							"key": "alias",
+							"value": "http://shortener/google"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "popular",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/popular",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"popular"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "200 OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/v1/popular",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"popular"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Vary",
+							"value": "Access-Control-Request-Method"
+						},
+						{
+							"key": "Vary",
+							"value": "Access-Control-Request-Headers"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 21 Dec 2024 00:27:30 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"rank\": 1,\n        \"originalUrl\": \"http://instagram.com\",\n        \"hashedUrl\": \"http://localhost:8080/v1/instagram\",\n        \"alias\": \"instagram\",\n        \"accessCount\": 45\n    },\n    {\n        \"rank\": 2,\n        \"originalUrl\": \"http://orkut.com\",\n        \"hashedUrl\": \"http://localhost:8080/v1/orkut\",\n        \"alias\": \"orkut\",\n        \"accessCount\": 13\n    },\n    {\n        \"rank\": 3,\n        \"originalUrl\": \"http://batatinha.com\",\n        \"hashedUrl\": \"http://localhost:8080/v1/batatinha\",\n        \"alias\": \"batatinha\",\n        \"accessCount\": 4\n    },\n    {\n        \"rank\": 4,\n        \"originalUrl\": \"http://google.com.br\",\n        \"hashedUrl\": \"http://localhost:8080/v1/google\",\n        \"alias\": \"google\",\n        \"accessCount\": 2\n    },\n    {\n        \"rank\": 5,\n        \"originalUrl\": \"http://orkut.com\",\n        \"hashedUrl\": \"http://localhost:8080/v1/orkutinho\",\n        \"alias\": \"orkutinho\",\n        \"accessCount\": 2\n    },\n    {\n        \"rank\": 6,\n        \"originalUrl\": \"http://instagram.com\",\n        \"hashedUrl\": \"http://localhost:8080/v1/insta\",\n        \"alias\": \"insta\",\n        \"accessCount\": 2\n    },\n    {\n        \"rank\": 7,\n        \"originalUrl\": \"http://batata.com\",\n        \"hashedUrl\": \"http://localhost:8080/v1/bateta\",\n        \"alias\": \"bateta\",\n        \"accessCount\": 1\n    },\n    {\n        \"rank\": 8,\n        \"originalUrl\": \"http://batatinha.com\",\n        \"hashedUrl\": \"http://localhost:8080/v1/batatona\",\n        \"alias\": \"batatona\",\n        \"accessCount\": 0\n    },\n    {\n        \"rank\": 9,\n        \"originalUrl\": \"http://orkut.com\",\n        \"hashedUrl\": \"http://localhost:8080/v1/orkudc29\",\n        \"alias\": \"orkudc29\",\n        \"accessCount\": 0\n    },\n    {\n        \"rank\": 10,\n        \"originalUrl\": \"http://batata.com\",\n        \"hashedUrl\": \"http://localhost:8080/v1/bata05af\",\n        \"alias\": \"bata05af\",\n        \"accessCount\": 0\n    }\n]"
+				}
+			]
+		}
+	]
+}

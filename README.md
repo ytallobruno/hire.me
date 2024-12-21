@@ -6,6 +6,7 @@
     - [**Spring Boot 3**](https://spring.io/projects/spring-boot)
     - [**Docker**](https://docs.docker.com/desktop/setup/install/linux/)
     - [**Yarn**](https://classic.yarnpkg.com/en/docs/install)
+    - [**Postman**](https://www.postman.com/downloads/)
 
 ## 🚀 Instalando dependências
 
@@ -27,6 +28,9 @@ Rodar o backend:
 ```make
 export SPRING_PROFILES_ACTIVE=local ; ./gradlew bootRun
 ```
+
+Para facilitar a utilização dos endpoints, use a collection do Postman disponível em:
+[Hire.Me - Postman Collection](./src/main/resources/postman/Hire.Me.postman_collection.json).
 
 ## 🧐 Build e Testes do backend
 
